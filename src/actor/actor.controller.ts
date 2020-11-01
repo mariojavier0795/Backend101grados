@@ -1,6 +1,5 @@
 import {
   Controller,
-  Get,
   Post,
   Res,
   Body,
@@ -33,7 +32,7 @@ export class ActorController {
     });
     response
       .status(HttpStatus.OK)
-      .send({ arrayMovie: listActorResponseBase64 });
+      .send({ arrayActor: listActorResponseBase64 });
   }
 
   @Post('insertActor')

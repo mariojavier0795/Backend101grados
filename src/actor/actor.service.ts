@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { ActorEntity } from 'src/entities/actor.entity';
 import { Actor } from './actor';
+import { Movie } from 'src/movie/movie';
 
 @Injectable()
 export class ActorService {
@@ -35,11 +36,19 @@ export class ActorService {
             edadactor: actor.edadactor,
           },
           {
-            movie: actor.movie,
+            movie: actor.movie == null ? '' : actor.movie,
           },
         ],
       });
     }
+    return listActor;
+  }
+
+  getActorByName(actor: Actor): Promise<ActorEntity[]> {
+    const listActor = this.actorRepository.find({
+      relations: ['movie'],
+      where: [{ nombreactor: Like('%' + actor.nombreactor + '%') }],
+    });
     return listActor;
   }
 
@@ -59,6 +68,16 @@ export class ActorService {
     if (actor.cactor != null) {
       actorEntityDeleted = this.actorRepository.delete({
         cactor: actor.cactor,
+      });
+    }
+    return actorEntityDeleted;
+  }
+
+  deleteActorwithMovieID(movie: Movie): Promise<ActorEntity[]> {
+    let actorEntityDeleted: any;
+    if (movie.cpelicula != null) {
+      actorEntityDeleted = this.actorRepository.delete({
+        movie: movie,
       });
     }
     return actorEntityDeleted;

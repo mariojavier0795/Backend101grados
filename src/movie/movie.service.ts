@@ -23,21 +23,27 @@ export class MovieService {
       listMovie = this.movieRepository.find();
     } else {
       listMovie = this.movieRepository.find({
+        relations: ['actors'],
         where: [
           {
             cpelicula: movie.cpelicula,
           },
           {
-            nombrepelicula: Like('%' + movie.nombrepelicula + '%'),
+            nombrepelicula:
+              movie.nombrepelicula == null
+                ? null
+                : Like('%' + movie.nombrepelicula + '%'),
           },
           {
-            duracionminutos: movie.duracionminutos,
+            duracionminutos:
+              movie.duracionminutos == null ? 0 : movie.duracionminutos,
           },
           {
             genero: movie.genero,
           },
           {
-            sinopsis: Like('%' + movie.sinopsis + '%'),
+            sinopsis:
+              movie.sinopsis == null ? null : Like('%' + movie.sinopsis + '%'),
           },
         ],
       });
